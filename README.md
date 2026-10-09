@@ -2,6 +2,8 @@
 
 Turn Codex into your creative design workspace. Create and arrange UI mockups and images on a persistent local canvas.
 
+![Codex Design running inside Codex, with four PACE running app screens arranged on the canvas](https://raw.githubusercontent.com/ummydev/codexdesign/main/docs/images/codex-design-pace-canvas.png)
+
 [Website](https://codexdesign.io/) · [Installation instructions](https://codexdesign.io/install.md)
 
 ## Install
