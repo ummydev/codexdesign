@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "codexdesign": {
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "./scripts/start.ps1", "mcp"],
+      "cwd": "."
+    }
+  }
+}

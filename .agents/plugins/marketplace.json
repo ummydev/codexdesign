@@ -1,0 +1,20 @@
+{
+  "name": "codexdesign-github",
+  "interface": {
+    "displayName": "Codex Design"
+  },
+  "plugins": [
+    {
+      "name": "codexdesign",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codexdesign"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
