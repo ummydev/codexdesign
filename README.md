@@ -58,4 +58,8 @@ There is no separate plugin API key or token wallet. Codex plan limits and appli
 
 This repository contains the prebuilt plugin and its Git marketplace catalog on `main`. It is the installation source, not a development checkout. Third-party license notices are included in `plugins/codexdesign/THIRD_PARTY_NOTICES.txt`.
 
+## License
+
+Codex Design is licensed under the GNU General Public License v3.0 only (GPL-3.0-only); see [LICENSE](LICENSE). To report a security problem, see [SECURITY.md](SECURITY.md).
+
 Codex Design is an independent plugin and is not affiliated with or endorsed by OpenAI.

@@ -36848,7 +36848,7 @@ server.registerTool(
 server.registerTool(
   "create_canvas",
   {
-    description: "Create a new, empty canvas project and return its generated projectId, projectPath and canvasUrl. Use it only when the user has no canvas to work on yet. Then follow the nextAction in the result: open canvasUrl in the Codex in-app browser and give the user a Markdown link to it.",
+    description: "Create a new, empty canvas project and return its generated projectId, projectPath and canvasUrl. Use it only when the user has no canvas to work on yet. Then follow the nextAction in the result: open canvasUrl in the Codex in-app browser and give the user a Markdown link to it. The free plan allows one project: if this fails because of the plan limit, tell the user what the error says (including the pricing link) and offer to continue in an existing canvas instead.",
     inputSchema: {
       name: external_exports.string().min(1).max(120).describe('Short descriptive name shown in the canvas, e.g. "Plant care app".')
     },
@@ -36912,6 +36912,25 @@ server.registerTool(
   handler(async () => {
     const state = await ensureDaemon();
     return request(state, "/api/projects");
+  })
+);
+server.registerTool(
+  "activate_pro",
+  {
+    description: "Activate Codex Design Pro on this computer, which removes the one-project limit of the free plan. Pass the license key the user received after subscribing at https://codexdesign.io/pricing; it starts with cdp_sub_. Only use a key the user gave you. Returns the plan now in effect.",
+    inputSchema: {
+      licenseKey: external_exports.string().min(1).max(200).describe('The license key, e.g. "cdp_sub_1Q\u2026".')
+    },
+    // It asks codexdesign.io whether the subscription is paid for.
+    annotations: { ...writeAnnotations, idempotentHint: true, openWorldHint: true }
+  },
+  handler(async ({ licenseKey }) => {
+    const state = await ensureDaemon();
+    return {
+      ...await request(state, "/api/license", {
+        key: licenseKey
+      })
+    };
   })
 );
 await ensureDaemon();

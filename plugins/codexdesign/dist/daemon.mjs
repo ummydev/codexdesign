@@ -15605,19 +15605,19 @@ var require_utils = __commonJS({
       const inflate = options?.inflate !== false;
       const limit = typeof options?.limit === "undefined" || options?.limit === null ? 102400 : bytes.parse(options.limit);
       const type = options?.type || defaultType;
-      const verify = options?.verify || false;
+      const verify2 = options?.verify || false;
       const defaultCharset = options?.defaultCharset || "utf-8";
       if (limit === null) {
         throw new TypeError(`option limit "${String(options.limit)}" is invalid`);
       }
-      if (verify !== false && typeof verify !== "function") {
+      if (verify2 !== false && typeof verify2 !== "function") {
         throw new TypeError("option verify must be function");
       }
       const shouldParse = typeof type !== "function" ? typeChecker(type) : type;
       return {
         inflate,
         limit,
-        verify,
+        verify: verify2,
         defaultCharset,
         shouldParse
       };
@@ -15675,7 +15675,7 @@ var require_read = __commonJS({
       let length;
       const opts = options;
       let stream;
-      const verify = opts.verify;
+      const verify2 = opts.verify;
       try {
         stream = contentstream(req, debug, opts.inflate);
         length = stream.length;
@@ -15684,7 +15684,7 @@ var require_read = __commonJS({
         return next(err);
       }
       opts.length = length;
-      opts.encoding = verify ? null : encoding;
+      opts.encoding = verify2 ? null : encoding;
       if (opts.encoding === null && encoding !== null && !iconv.encodingExists(encoding)) {
         return next(createError(415, 'unsupported charset "' + encoding.toUpperCase() + '"', {
           charset: encoding.toLowerCase(),
@@ -15712,10 +15712,10 @@ var require_read = __commonJS({
           });
           return;
         }
-        if (verify) {
+        if (verify2) {
           try {
             debug("verify body");
-            verify(req, res, body, encoding);
+            verify2(req, res, body, encoding);
           } catch (err) {
             next(createError(403, err, {
               body,
@@ -18929,7 +18929,7 @@ var require_view = __commonJS({
     var dirname4 = path2.dirname;
     var basename3 = path2.basename;
     var extname = path2.extname;
-    var join7 = path2.join;
+    var join8 = path2.join;
     var resolve4 = path2.resolve;
     module.exports = View;
     function View(name, options) {
@@ -18991,12 +18991,12 @@ var require_view = __commonJS({
     };
     View.prototype.resolve = function resolve5(dir, file2) {
       var ext = this.ext;
-      var path3 = join7(dir, file2);
+      var path3 = join8(dir, file2);
       var stat2 = tryStat(path3);
       if (stat2 && stat2.isFile()) {
         return path3;
       }
-      path3 = join7(dir, basename3(file2, ext), "index" + ext);
+      path3 = join8(dir, basename3(file2, ext), "index" + ext);
       stat2 = tryStat(path3);
       if (stat2 && stat2.isFile()) {
         return path3;
@@ -21399,13 +21399,13 @@ var require_application = __commonJS({
       this.router.param(name, fn);
       return this;
     };
-    app2.set = function set2(setting, val) {
+    app2.set = function set2(setting2, val) {
       if (arguments.length === 1) {
-        return this.settings[setting];
+        return this.settings[setting2];
       }
-      debug('set "%s" to %o', setting, val);
-      this.settings[setting] = val;
-      switch (setting) {
+      debug('set "%s" to %o', setting2, val);
+      this.settings[setting2] = val;
+      switch (setting2) {
         case "etag":
           this.set("etag fn", compileETag(val));
           break;
@@ -21425,17 +21425,17 @@ var require_application = __commonJS({
     app2.path = function path2() {
       return this.parent ? this.parent.path() + this.mountpath : "";
     };
-    app2.enabled = function enabled(setting) {
-      return Boolean(this.set(setting));
+    app2.enabled = function enabled(setting2) {
+      return Boolean(this.set(setting2));
     };
-    app2.disabled = function disabled(setting) {
-      return !this.set(setting);
+    app2.disabled = function disabled(setting2) {
+      return !this.set(setting2);
     };
-    app2.enable = function enable(setting) {
-      return this.set(setting, true);
+    app2.enable = function enable(setting2) {
+      return this.set(setting2, true);
     };
-    app2.disable = function disable(setting) {
-      return this.set(setting, false);
+    app2.disable = function disable(setting2) {
+      return this.set(setting2, false);
     };
     methods2.forEach(function(method) {
       app2[method] = function(path2) {
@@ -22896,7 +22896,7 @@ var require_send = __commonJS({
     var Stream = __require("stream");
     var util = __require("util");
     var extname = path2.extname;
-    var join7 = path2.join;
+    var join8 = path2.join;
     var normalize = path2.normalize;
     var resolve4 = path2.resolve;
     var sep2 = path2.sep;
@@ -23068,7 +23068,7 @@ var require_send = __commonJS({
           return res;
         }
         parts = path3.split(sep2);
-        path3 = normalize(join7(root, path3));
+        path3 = normalize(join8(root, path3));
       } else {
         if (UP_PATH_REGEXP.test(path3)) {
           debug('malicious path "%s"', path3);
@@ -23201,7 +23201,7 @@ var require_send = __commonJS({
           if (err) return self.onStatError(err);
           return self.error(404);
         }
-        var p = join7(path3, self._index[i]);
+        var p = join8(path3, self._index[i]);
         debug('stat "%s"', p);
         fs.stat(p, function(err2, stat2) {
           if (err2) return next(err2);
@@ -24059,7 +24059,7 @@ var import_express = __toESM(require_express2(), 1);
 import { createServer } from "node:http";
 import { watch } from "node:fs";
 import { mkdir as mkdir4, realpath as realpath2, unlink } from "node:fs/promises";
-import { basename as basename2, join as join6, resolve as resolve3, relative as relative2, isAbsolute as isAbsolute2, sep } from "node:path";
+import { basename as basename2, join as join7, resolve as resolve3, relative as relative2, isAbsolute as isAbsolute2, sep } from "node:path";
 import { randomBytes } from "node:crypto";
 
 // node_modules/zod/v4/classic/external.js
@@ -43889,6 +43889,7 @@ async function listenOnAvailablePort(server2) {
 }
 
 // server/telemetry.ts
+import { existsSync } from "node:fs";
 import { readFile as readFile2, writeFile, mkdir, rename } from "node:fs/promises";
 import { join as join3 } from "node:path";
 import { randomUUID } from "node:crypto";
@@ -43898,7 +43899,9 @@ var INSTALL_FILE = join3(RUNTIME, "install.json");
 var TIMEOUT_MS = 3e3;
 var off = (value) => ["0", "false", "off", "no"].includes(value || "");
 var on = (value) => !!value && !off(value);
-var TELEMETRY_ENABLED = !ISOLATED && !off(process.env.CODEXDESIGN_TELEMETRY ?? "1") && !on(process.env.DO_NOT_TRACK);
+var DEVELOPMENT_COPY = existsSync(join3(ROOT, ".git"));
+var setting = process.env.CODEXDESIGN_TELEMETRY || void 0;
+var TELEMETRY_ENABLED = !ISOLATED && !on(process.env.DO_NOT_TRACK) && (setting === void 0 ? !DEVELOPMENT_COPY : !off(setting));
 var baseProperties = () => ({
   version: VERSION,
   os: process.platform,
@@ -45338,6 +45341,121 @@ async function restoreVersion(id, path2, versionId) {
   return recordVersion(id, path2, { source: "restore", content });
 }
 
+// server/license.ts
+import { readFile as readFile5 } from "node:fs/promises";
+import { join as join6 } from "node:path";
+var FREE_PROJECT_LIMIT = 1;
+var PRICING_URL = "https://codexdesign.io/pricing";
+var LICENSE_API = ISOLATED && process.env.CODEXDESIGN_LICENSE_API || "https://codexdesign.io/api/license";
+var LICENSE_FILE = join6(DATA, "license.json");
+var RECHECK_MS = 12 * 60 * 60 * 1e3;
+var OFFLINE_GRACE_MS = 3 * 24 * 60 * 60 * 1e3;
+var TIMEOUT_MS2 = 5e3;
+var KEY_PATTERN = /^cdp_sub_[A-Za-z0-9]{8,64}$/;
+async function verify(key) {
+  try {
+    const response = await fetch(LICENSE_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key }),
+      signal: AbortSignal.timeout(TIMEOUT_MS2)
+    });
+    if (response.status >= 500) return null;
+    const body = await response.json();
+    return {
+      valid: body.valid === true,
+      status: typeof body.status === "string" ? body.status : "invalid",
+      currentPeriodEnd: typeof body.currentPeriodEnd === "string" ? body.currentPeriodEnd : null,
+      cancelAtPeriodEnd: body.cancelAtPeriodEnd === true,
+      error: typeof body.error === "string" ? body.error : void 0
+    };
+  } catch {
+    return null;
+  }
+}
+async function readLicense() {
+  try {
+    const stored = JSON.parse(await readFile5(LICENSE_FILE, "utf8"));
+    if (typeof stored.key !== "string" || typeof stored.checkedAt !== "string") return null;
+    return {
+      key: stored.key,
+      active: stored.active === true,
+      status: String(stored.status ?? "unknown"),
+      currentPeriodEnd: typeof stored.currentPeriodEnd === "string" ? stored.currentPeriodEnd : null,
+      cancelAtPeriodEnd: stored.cancelAtPeriodEnd === true,
+      checkedAt: stored.checkedAt
+    };
+  } catch {
+    return null;
+  }
+}
+var toStored = (key, verdict) => ({
+  key,
+  active: verdict.valid,
+  status: verdict.status,
+  currentPeriodEnd: verdict.currentPeriodEnd,
+  cancelAtPeriodEnd: verdict.cancelAtPeriodEnd,
+  checkedAt: (/* @__PURE__ */ new Date()).toISOString()
+});
+function isPro(license) {
+  if (!license?.active) return false;
+  const paidUntil = Date.parse(license.currentPeriodEnd ?? license.checkedAt);
+  return Number.isNaN(paidUntil) || paidUntil + OFFLINE_GRACE_MS > Date.now();
+}
+function planInfo(license) {
+  const pro = isPro(license);
+  return {
+    plan: pro ? "pro" : "free",
+    projectLimit: pro ? null : FREE_PROJECT_LIMIT,
+    pricingUrl: PRICING_URL,
+    license: license && {
+      key: license.key,
+      status: license.status,
+      currentPeriodEnd: license.currentPeriodEnd,
+      cancelAtPeriodEnd: license.cancelAtPeriodEnd,
+      checkedAt: license.checkedAt
+    }
+  };
+}
+function currentPlan() {
+  return serial("license", async () => {
+    let license = await readLicense();
+    if (license && Date.now() - Date.parse(license.checkedAt) > RECHECK_MS) {
+      const verdict = await verify(license.key);
+      if (verdict) {
+        license = toStored(license.key, verdict);
+        await atomicJson(LICENSE_FILE, license);
+      }
+    }
+    return planInfo(license);
+  });
+}
+async function activateLicense(given) {
+  const key = given.trim();
+  if (!KEY_PATTERN.test(key))
+    throw new HttpError(
+      400,
+      `That is not a Codex Design license key. Keys start with cdp_sub_ and are shown after subscribing at ${PRICING_URL}.`
+    );
+  return serial("license", async () => {
+    const verdict = await verify(key);
+    if (!verdict)
+      throw new HttpError(
+        503,
+        "Could not reach codexdesign.io to check the license key. Check the network connection and try again."
+      );
+    if (!verdict.valid)
+      throw new HttpError(
+        400,
+        verdict.error || `This license key has no active subscription. Renew at ${PRICING_URL}.`
+      );
+    const license = toStored(key, verdict);
+    await atomicJson(LICENSE_FILE, license);
+    return planInfo(license);
+  });
+}
+var projectLimitMessage = (count) => `The free plan of Codex Design includes ${FREE_PROJECT_LIMIT} canvas project, and this computer already has ${count}. Codex Design Pro ($5/month) gives unlimited projects: subscribe at ${PRICING_URL}, then activate the license key with the activate_pro tool or from the canvas menu (Codex Design \u2192 Plan). Existing projects stay available: reuse one with list_canvas_projects and open_canvas.`;
+
 // server/daemon.ts
 await mkdir4(RUNTIME, { recursive: true, mode: 448 });
 await mkdir4(PROJECTS_DIR, { recursive: true });
@@ -45408,9 +45526,27 @@ app.get(
 );
 app.post("/api/projects", async (req, res) => {
   const { name } = external_exports.object({ name: external_exports.string().min(1).max(120) }).strict().parse(req.body);
-  const project = await createProject(name);
+  const project = await serial("projects", async () => {
+    const { projectLimit } = await currentPlan();
+    const count = (await listProjects()).length;
+    if (projectLimit !== null && count >= projectLimit) {
+      capture("plan_limit_reached", { project_count: count });
+      throw new HttpError(402, projectLimitMessage(count));
+    }
+    return createProject(name);
+  });
   capture("canvas_project_created");
   res.json(projectInfo(project));
+});
+app.get(
+  "/api/plan",
+  async (_req, res) => res.json({ ...await currentPlan(), projectCount: (await listProjects()).length })
+);
+app.post("/api/license", async (req, res) => {
+  const { key } = external_exports.object({ key: external_exports.string().min(1).max(200) }).strict().parse(req.body);
+  const plan = await activateLicense(key);
+  capture("pro_activated");
+  res.json({ ...plan, projectCount: (await listProjects()).length });
 });
 app.get(
   "/api/projects/:id",
@@ -45579,13 +45715,13 @@ app.use(
   },
   import_express.default.static(PROJECTS_DIR, { index: false, dotfiles: "deny", etag: true })
 );
-app.use(import_express.default.static(join6(ROOT, "web"), { index: "index.html", etag: true }));
+app.use(import_express.default.static(join7(ROOT, "web"), { index: "index.html", etag: true }));
 app.use((_req, res) => res.status(404).json({ error: "Not found" }));
 var errorHandler = (error62, _req, res, _next) => {
   const status = error62 instanceof external_exports.ZodError ? 400 : error62.status || (error62.code === "ENOENT" ? 404 : 500);
   if (status >= 500) console.error(error62);
   res.status(status).json({
-    error: status >= 500 ? "Local storage operation failed. Check daemon.log." : error62.message
+    error: status >= 500 && !(error62 instanceof HttpError) ? "Local storage operation failed. Check daemon.log." : error62.message
   });
 };
 app.use(errorHandler);

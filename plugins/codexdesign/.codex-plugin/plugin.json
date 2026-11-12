@@ -1,6 +1,7 @@
 {
   "name": "codexdesign",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "license": "GPL-3.0-only",
   "description": "Generate images into a persistent React Flow canvas and open it in the Codex in-app browser.",
   "author": {
     "name": "Weixuan"
@@ -14,7 +15,9 @@
     "category": "Productivity",
     "capabilities": ["Write"],
     "defaultPrompt": ["Open Codex Design canvas", "Create a new Codex Design canvas"],
-    "brandColor": "#2A4235"
+    "brandColor": "#2A4235",
+    "composerIcon": "./assets/composer-icon.png",
+    "logo": "./assets/logo.png"
   },
   "mcpServers": "./.mcp.json"
 }
