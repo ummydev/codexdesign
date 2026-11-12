@@ -43743,6 +43743,7 @@ var DATA = resolve(
   ISOLATED ? process.env.CODEXDESIGN_HOME : join(homedir(), ".codex-design-plugin")
 );
 var RUNTIME = join(DATA, "runtime");
+var BILLING_LIVE = ISOLATED && process.env.CODEXDESIGN_BILLING === "live";
 var PREFERRED_PORT = ISOLATED && process.env.CODEXDESIGN_PORT ? Number(process.env.CODEXDESIGN_PORT) : 61974;
 if (!Number.isInteger(PREFERRED_PORT) || PREFERRED_PORT < 1024 || PREFERRED_PORT > 65535)
   throw new Error("CODEXDESIGN_PORT must be an integer between 1024 and 65535.");
@@ -45406,7 +45407,8 @@ function planInfo(license) {
   const pro = isPro(license);
   return {
     plan: pro ? "pro" : "free",
-    projectLimit: pro ? null : FREE_PROJECT_LIMIT,
+    billing: BILLING_LIVE,
+    projectLimit: pro || !BILLING_LIVE ? null : FREE_PROJECT_LIMIT,
     pricingUrl: PRICING_URL,
     license: license && {
       key: license.key,
@@ -45544,6 +45546,7 @@ app.get(
 );
 app.post("/api/license", async (req, res) => {
   const { key } = external_exports.object({ key: external_exports.string().min(1).max(200) }).strict().parse(req.body);
+  if (!BILLING_LIVE) throw new HttpError(404, "Codex Design Pro is not available yet.");
   const plan = await activateLicense(key);
   capture("pro_activated");
   res.json({ ...plan, projectCount: (await listProjects()).length });

@@ -30,6 +30,7 @@ var DATA = resolve(
   ISOLATED ? process.env.CODEXDESIGN_HOME : join(homedir(), ".codex-design-plugin")
 );
 var RUNTIME = join(DATA, "runtime");
+var BILLING_LIVE = ISOLATED && process.env.CODEXDESIGN_BILLING === "live";
 var PREFERRED_PORT = ISOLATED && process.env.CODEXDESIGN_PORT ? Number(process.env.CODEXDESIGN_PORT) : 61974;
 if (!Number.isInteger(PREFERRED_PORT) || PREFERRED_PORT < 1024 || PREFERRED_PORT > 65535)
   throw new Error("CODEXDESIGN_PORT must be an integer between 1024 and 65535.");

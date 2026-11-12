@@ -36500,6 +36500,7 @@ var DATA = resolve(
   ISOLATED ? process.env.CODEXDESIGN_HOME : join(homedir(), ".codex-design-plugin")
 );
 var RUNTIME = join(DATA, "runtime");
+var BILLING_LIVE = ISOLATED && process.env.CODEXDESIGN_BILLING === "live";
 var PREFERRED_PORT = ISOLATED && process.env.CODEXDESIGN_PORT ? Number(process.env.CODEXDESIGN_PORT) : 61974;
 if (!Number.isInteger(PREFERRED_PORT) || PREFERRED_PORT < 1024 || PREFERRED_PORT > 65535)
   throw new Error("CODEXDESIGN_PORT must be an integer between 1024 and 65535.");
@@ -36914,24 +36915,26 @@ server.registerTool(
     return request(state, "/api/projects");
   })
 );
-server.registerTool(
-  "activate_pro",
-  {
-    description: "Activate Codex Design Pro on this computer, which removes the one-project limit of the free plan. Pass the license key the user received after subscribing at https://codexdesign.io/pricing; it starts with cdp_sub_. Only use a key the user gave you. Returns the plan now in effect.",
-    inputSchema: {
-      licenseKey: external_exports.string().min(1).max(200).describe('The license key, e.g. "cdp_sub_1Q\u2026".')
+if (BILLING_LIVE) {
+  server.registerTool(
+    "activate_pro",
+    {
+      description: "Activate Codex Design Pro on this computer, which removes the one-project limit of the free plan. Pass the license key the user received after subscribing at https://codexdesign.io/pricing; it starts with cdp_sub_. Only use a key the user gave you. Returns the plan now in effect.",
+      inputSchema: {
+        licenseKey: external_exports.string().min(1).max(200).describe('The license key, e.g. "cdp_sub_1Q\u2026".')
+      },
+      // It asks codexdesign.io whether the subscription is paid for.
+      annotations: { ...writeAnnotations, idempotentHint: true, openWorldHint: true }
     },
-    // It asks codexdesign.io whether the subscription is paid for.
-    annotations: { ...writeAnnotations, idempotentHint: true, openWorldHint: true }
-  },
-  handler(async ({ licenseKey }) => {
-    const state = await ensureDaemon();
-    return {
-      ...await request(state, "/api/license", {
-        key: licenseKey
-      })
-    };
-  })
-);
+    handler(async ({ licenseKey }) => {
+      const state = await ensureDaemon();
+      return {
+        ...await request(state, "/api/license", {
+          key: licenseKey
+        })
+      };
+    })
+  );
+}
 await ensureDaemon();
 await server.connect(new StdioServerTransport());
